@@ -5,6 +5,15 @@ Tiny Zig + udev helper to initialize the Chicony IR camera on Lenovo ThinkBook 1
 No daemon, configuration file, or systemd service is needed. Success is silent;
 errors are written to stderr for udev to capture.
 
+## Packages
+
+## Arch Linux (PKGBUILD)
+
+```sh
+cd archlinux
+makepkg -si
+```
+
 ## Build from Source
 
 Requires Zig 0.16.0, libc development headers, and Linux UAPI headers (`linux/uvcvideo.h` and `linux/usb/video.h`).
@@ -12,11 +21,6 @@ Requires Zig 0.16.0, libc development headers, and Linux UAPI headers (`linux/uv
 ```sh
 zig build --release=small
 ```
-
-The helper and udev rule are staged under `zig-out/lib/udev/`.
-Building does not install system files or change PAM.
-
-## Install
 
 ```sh
 sudo install -Dm755 zig-out/lib/udev/21mw-ir-emitter /usr/lib/udev/21mw-ir-emitter
