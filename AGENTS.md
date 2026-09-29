@@ -84,32 +84,14 @@ observation, not a size guarantee or a universally portable Linux artifact.
 
 ## Hardware and Lifecycle Validation
 
-Verified during initial implementation:
+The target machine reports DMI product `21MW`. The release helper successfully
+sent the control to `/dev/video2`, exited 0, and produced no output. The installed
+udev rule has been tested: Howdy works reliably, including after suspend/resume,
+without manually rerunning the helper or adding a suspend/resume hook. The udev
+rule alone is sufficient; do not add PAM or other lifecycle hooks.
 
-- The machine reports DMI product `21MW`.
-- The release helper successfully sent the control to `/dev/video2`, exited 0,
-  and produced no output.
-- `udevadm test --extra-rules-dir=udev --action=add` queued the helper only for
-  video2, not video0, video1, or video3. Change/remove events did not queue it.
-  This simulates matching; it does not execute `RUN` commands.
-- Formatting, Debug/ReleaseSmall builds, isolated tests, and udev rule
-  validation passed. Binary dependencies and staged layout were inspected.
-
-Still requires attended testing after installation and PAM migration:
-
-1. Apply the control once, then authenticate with Howdy repeatedly without
-   rerunning the helper. Verify the emitter works on every attempt. The old
-   `linux-enable-ir-emitter` PAM hook must be removed first, or it can mask
-   failures by reapplying the control.
-2. Separately suspend and resume. Observe events with
-   `sudo udevadm monitor --udev --property --subsystem-match=video4linux` and
-   repeat authentication without manually reapplying the control.
-3. Reboot, or perform a deliberate camera USB reset in a safe session. Verify
-   a matching add event, successful helper execution in udev debug logs, and
-   working Howdy without manual initialization. A synthetic add event checks
-   wiring but does not prove reset or reboot behavior.
-
-Reboot, USB reset, suspend/resume, and repeated Howdy authentication were not
-performed during initial implementation. System installation and PAM migration
-were not performed either. Do not add suspend/resume hooks unless testing proves
-that the camera loses the setting without generating a suitable add event.
+`udevadm test --extra-rules-dir=udev --action=add` queued the helper only for
+video2, not video0, video1, or video3. Change/remove events did not queue it.
+This simulates matching; it does not execute `RUN` commands. Formatting,
+Debug/ReleaseSmall builds, isolated tests, and udev rule validation passed.
+Binary dependencies and staged layout were inspected.

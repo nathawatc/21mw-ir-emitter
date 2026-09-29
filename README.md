@@ -38,16 +38,6 @@ either the RGB or IR interface.
 
 ## Verify and Troubleshoot
 
-After installation and removal of the old emitter hook:
-
-1. Authenticate with Howdy repeatedly without manually rerunning the helper.
-2. Test authentication after suspend/resume separately.
-3. Test authentication after reboot without manual initialization.
-
 Check `journalctl -b -u systemd-udevd` for helper failures. If invoking the helper
 manually, pass exactly one verified IR device node. It does not check the camera
 identity itself and returns a non-zero status on failure.
-
-The helper has successfully sent the control on the development machine.
-Repeated Howdy authentication, suspend/resume, and reboot/reset behavior still
-require attended testing. No suspend/resume hook is included.
