@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="video4linux", ENV{ID_VENDOR_ID}=="04f2", ENV{ID_MODEL_ID}=="b7e8", ENV{ID_USB_INTERFACE_NUM}=="02", ATTR{index}=="0", RUN+="/usr/lib/udev/21mw-ir-emitter $devnode"

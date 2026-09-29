@@ -1,0 +1,7 @@
+.{
+    .name = ._21mw_ir_emitter,
+    .version = "0.0.0",
+    .fingerprint = 0x9df89dfce9a9dc35, // Changing this has security and trust implications.
+    .minimum_zig_version = "0.16.0",
+    .paths = .{ "build.zig", "build.zig.zon", "src", "udev", "README.md", "LICENSE" },
+}
