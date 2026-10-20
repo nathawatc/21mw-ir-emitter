@@ -16,7 +16,7 @@ makepkg -si
 
 ## Build from Source
 
-Requires Zig 0.16.0, libc development headers, and Linux UAPI headers (`linux/uvcvideo.h` and `linux/usb/video.h`).
+Requires Zig 0.17.0, libc development headers, and Linux UAPI headers (`linux/uvcvideo.h` and `linux/usb/video.h`).
 
 ```sh
 zig build --release=small

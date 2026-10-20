@@ -12,11 +12,11 @@ control, close the descriptor, and exit. Accept exactly one device-node
 argument. Success must be silent; report errors to stderr and return non-zero
 on failure. Always close an opened descriptor.
 
-Use the Linux UVC ABI directly through `@cImport`. Keep the payload and query
-structure on the stack. Preserve the C-compatible entry point and direct libc
-calls rather than introducing general-purpose process/I/O initialization.
-Avoid heap allocation. Do not add threads, configuration parsing, environment
-dependencies, shell commands, subprocesses, daemons, PAM hooks, or systemd units.
+Use the Linux UVC ABI directly via C header translation (using the official `translate-c` package).
+Keep the payload and query structure on the stack. Preserve the C-compatible entry point and direct
+libc calls rather than introducing general-purpose process/I/O initialization. Avoid heap
+allocation. Do not add threads, configuration parsing, environment dependencies, shell commands,
+subprocesses, daemons, PAM hooks, or systemd units.
 
 ## Exact Control
 
@@ -57,7 +57,7 @@ The helper deliberately does not identify cameras itself.
 
 ## Build and Isolated Tests
 
-Requires Zig 0.16.0, libc development headers, and Linux UAPI headers.
+Requires Zig 0.17.0, libc development headers, and Linux UAPI headers.
 
 ```sh
 zig fmt .
@@ -79,7 +79,7 @@ lib/udev/rules.d/61-21mw-ir-emitter.rules
 
 Deployment uses `/usr` as the installation prefix. A plain `zig build` is a
 debug build; use `--release=small` for deployment. The inspected native release
-binary was 4,264 bytes, stripped, dynamically linked only to libc. This is an
+binary was 5,048 bytes, stripped, dynamically linked only to libc. This is an
 observation, not a size guarantee or a universally portable Linux artifact.
 
 ## Hardware and Lifecycle Validation
@@ -93,5 +93,5 @@ rule alone is sufficient; do not add PAM or other lifecycle hooks.
 `udevadm test --extra-rules-dir=udev --action=add` queued the helper only for
 video2, not video0, video1, or video3. Change/remove events did not queue it.
 This simulates matching; it does not execute `RUN` commands. Formatting,
-Debug/ReleaseSmall builds, isolated tests, and udev rule validation passed.
+Debug/Release (`--release=small`) builds, isolated tests, and udev rule validation passed.
 Binary dependencies and staged layout were inspected.

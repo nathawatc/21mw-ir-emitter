@@ -1,9 +1,18 @@
 const std = @import("std");
+const Translator = @import("translate_c").Translator;
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     if (target.result.os.tag != .linux) @panic("21mw-ir-emitter requires Linux");
-    const optimize = b.standardOptimizeOption(.{ .preferred_optimize_mode = .ReleaseSmall });
+    const optimize = b.standardOptimizeOption(.{ .preferred_optimize_mode = .small });
+    const translate_c = b.dependency("translate_c", .{});
+    const translator: Translator = .init(translate_c, .{
+        .c_source_file = b.path("src/c.h"),
+        .target = target,
+        .optimize = optimize,
+    });
+    const c_mod = translator.mod;
+
     const exe = b.addExecutable(.{
         .name = "21mw-ir-emitter",
         .root_module = b.createModule(.{
@@ -11,9 +20,12 @@ pub fn build(b: *std.Build) void {
             .target = target,
             .optimize = optimize,
             .link_libc = true,
+            .imports = &.{
+                .{ .name = "c", .module = c_mod },
+            },
         }),
     });
-    if (optimize != .Debug) exe.lto = .full;
+    if (optimize != .debug) exe.lto = .full;
     const install = b.addInstallArtifact(exe, .{
         .dest_dir = .{ .override = .{ .custom = "lib/udev" } },
     });

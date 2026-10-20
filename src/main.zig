@@ -1,11 +1,4 @@
-const c = @cImport({
-    @cInclude("fcntl.h");
-    @cInclude("unistd.h");
-    @cInclude("stdio.h");
-    @cInclude("sys/ioctl.h");
-    @cInclude("linux/uvcvideo.h");
-    @cInclude("linux/usb/video.h");
-});
+const c = @import("c");
 
 pub export fn main(argc: c_int, argv: [*]const [*:0]const u8) c_int {
     if (argc != 2) {
