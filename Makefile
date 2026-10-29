@@ -1,6 +1,6 @@
 PREFIX ?= /usr
-CFLAGS ?= -s
-ALL_LDFLAGS = -nostdlib -static -Wl,-n -Wl,-z,noexecstack -Wl,--build-id=none -Wl,--no-eh-frame-hdr -Wl,--gc-sections $(LDFLAGS)
+CFLAGS ?=
+ALL_LDFLAGS = -nostdlib -static -s -Wl,-n -Wl,-z,noexecstack -Wl,--build-id=none -Wl,--no-eh-frame-hdr -Wl,--gc-sections $(LDFLAGS)
 
 all: 21mw-ir-emitter
 
