@@ -7,8 +7,8 @@ pkgdesc='Tiny helper for the Chicony IR emitter on Lenovo 21MW systems'
 arch=('x86_64')
 url='https://codeberg.org/nathawat/21mw-ir-emitter'
 license=('Apache-2.0')
-depends=('glibc' 'systemd')
-makedepends=('zig>=0.17.0' 'zig<0.18.0' 'linux-api-headers')
+depends=('systemd')
+makedepends=('gcc')
 
 _tag=v${pkgver}
 
@@ -17,19 +17,15 @@ b2sums=('51eb94906aa0c74217164bbbd1cc29a57a24626fdb3e5fbec609ff2ae4628b6103d8ea2
 
 build() {
 	cd "$srcdir/$pkgname"
-	zig build --release=small
+	make
 }
 
 check() {
 	cd "$srcdir/$pkgname"
-	zig build test --release=small
-	udevadm verify udev/61-21mw-ir-emitter.rules
+	make check
 }
 
 package() {
 	cd "$srcdir/$pkgname"
-	install -Dm755 zig-out/lib/udev/21mw-ir-emitter \
-		"$pkgdir/usr/lib/udev/21mw-ir-emitter"
-	install -Dm644 udev/61-21mw-ir-emitter.rules \
-		"$pkgdir/usr/lib/udev/rules.d/61-21mw-ir-emitter.rules"
+	make DESTDIR="$pkgdir" PREFIX=/usr install
 }

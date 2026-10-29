@@ -1,30 +1,26 @@
 # 21MW IR Emitter
 
-Tiny Zig + udev helper to initialize the Chicony IR camera on Lenovo ThinkBook 16 G7 ARP (21MW)
+x86_64 assembly + udev helper to initialize the Chicony IR camera on Lenovo ThinkBook 16 G7 ARP (21MW)
 
 No daemon, configuration file, or systemd service is needed. Success is silent;
 errors are written to stderr for udev to capture.
 
 ## Packages
 
-## Arch Linux (PKGBUILD)
+### Arch Linux (PKGBUILD)
 
 ```sh
 cd archlinux
 makepkg -si
 ```
 
-## Build from Source
+### Build from Source
 
-Requires Zig 0.17.0, libc development headers, and Linux UAPI headers (`linux/uvcvideo.h` and `linux/usb/video.h`).
-
-```sh
-zig build --release=small
-```
+Requires GCC and make.
 
 ```sh
-sudo install -Dm755 zig-out/lib/udev/21mw-ir-emitter /usr/lib/udev/21mw-ir-emitter
-sudo install -Dm644 udev/61-21mw-ir-emitter.rules /usr/lib/udev/rules.d/61-21mw-ir-emitter.rules
+make
+sudo make install
 sudo udevadm control --reload
 ```
 

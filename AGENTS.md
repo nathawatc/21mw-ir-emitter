@@ -12,11 +12,11 @@ control, close the descriptor, and exit. Accept exactly one device-node
 argument. Success must be silent; report errors to stderr and return non-zero
 on failure. Always close an opened descriptor.
 
-Use the Linux UVC ABI directly via C header translation (using the official `translate-c` package).
-Keep the payload and query structure on the stack. Preserve the C-compatible entry point and direct
-libc calls rather than introducing general-purpose process/I/O initialization. Avoid heap
-allocation. Do not add threads, configuration parsing, environment dependencies, shell commands,
-subprocesses, daemons, PAM hooks, or systemd units.
+Use direct x86_64 assembly with raw Linux syscalls. Keep the payload and
+query structure on the stack. Direct kernel syscalls avoid runtime initialization
+and all libc dependencies. Avoid heap allocation. Do not add threads,
+configuration parsing, environment dependencies, shell commands, subprocesses,
+daemons, PAM hooks, or systemd units.
 
 ## Exact Control
 
@@ -57,29 +57,25 @@ The helper deliberately does not identify cameras itself.
 
 ## Build and Isolated Tests
 
-Requires Zig 0.17.0, libc development headers, and Linux UAPI headers.
+Requires GCC and make.
 
 ```sh
-zig fmt .
-zig build --release=small
-zig build test --release=small
-udevadm verify udev/61-21mw-ir-emitter.rules
+make
+make check
 ```
 
 The four tests cover missing/extra arguments, an empty path, and an unsupported
 ioctl on `/dev/null`. They expect failure and empty stdout. Normal tests must
 never require, open, or modify a camera. Do not add fake shell wrappers,
-emulators, or large mocking infrastructure. There is deliberately no generic
-`run` build step.
+emulators, or large mocking infrastructure.
 
 ```text
 lib/udev/21mw-ir-emitter
 lib/udev/rules.d/61-21mw-ir-emitter.rules
 ```
 
-Deployment uses `/usr` as the installation prefix. A plain `zig build` is a
-debug build; use `--release=small` for deployment. The inspected native release
-binary was 5,048 bytes, stripped, dynamically linked only to libc. This is an
+Deployment uses `/usr` as the installation prefix. The inspected native release
+binary is ~1.1 KB, static, stripped, with zero external dependencies. This is an
 observation, not a size guarantee or a universally portable Linux artifact.
 
 ## Hardware and Lifecycle Validation
@@ -92,6 +88,6 @@ rule alone is sufficient; do not add PAM or other lifecycle hooks.
 
 `udevadm test --extra-rules-dir=udev --action=add` queued the helper only for
 video2, not video0, video1, or video3. Change/remove events did not queue it.
-This simulates matching; it does not execute `RUN` commands. Formatting,
-Debug/Release (`--release=small`) builds, isolated tests, and udev rule validation passed.
-Binary dependencies and staged layout were inspected.
+This simulates matching; it does not execute `RUN` commands. Builds,
+isolated tests, and udev rule validation passed. Binary dependencies and staged
+layout were inspected.
