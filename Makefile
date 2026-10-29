@@ -1,11 +1,11 @@
 PREFIX ?= /usr
-CFLAGS ?= -Os -s
-LDFLAGS ?= -nostdlib -static -Wl,-n -Wl,-z,noexecstack -Wl,--build-id=none -Wl,--no-eh-frame-hdr -Wl,--gc-sections
+CFLAGS ?= -s
+ALL_LDFLAGS = -nostdlib -static -Wl,-n -Wl,-z,noexecstack -Wl,--build-id=none -Wl,--no-eh-frame-hdr -Wl,--gc-sections $(LDFLAGS)
 
 all: 21mw-ir-emitter
 
 21mw-ir-emitter: src/main.s
-	$(CC) $(CFLAGS) $< $(LDFLAGS) -o $@
+	$(CC) $(CFLAGS) $< $(ALL_LDFLAGS) -o $@
 
 check: 21mw-ir-emitter
 	! ./$< >/dev/null 2>&1
