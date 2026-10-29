@@ -2,6 +2,7 @@
 .globl _start
 _start:
 	endbr64				# CET IBT landing pad
+	xorl	%r9d, %r9d		# exit status = 0
 	cmpq	$2, (%rsp)
 	jne	.Lusage
 
@@ -16,13 +17,11 @@ _start:
 	js	.Lerr_open
 
 	movl	%eax, %r8d		# r8d = fd
-	xorl	%r9d, %r9d		# r9d = exit status
 
-	subq	$40, %rsp
+	# Setup payload and struct uvc_xu_control_query on stack
+	subq	$32, %rsp
 	movq	$0x0000000000020301, (%rsp)
 	movb	$0, 8(%rsp)
-
-	# struct uvc_xu_control_query
 	movl	$0x0001060e, 16(%rsp)	# unit=14, sel=6, query=1
 	movl	$9, 20(%rsp)		# size=9
 	movq	%rsp, 24(%rsp)		# data = &payload
@@ -39,10 +38,7 @@ _start:
 
 	leaq	str_ioctl(%rip), %rsi
 	movl	$str_ioctl_len, %edx
-	movl	$2, %edi		# stderr
-	movl	$1, %eax		# __NR_write
-	syscall
-	movl	$1, %r9d
+	call	.Lwarn
 
 .Lclose:
 	# sys_close(fd)
@@ -55,10 +51,7 @@ _start:
 
 	leaq	str_close(%rip), %rsi
 	movl	$str_close_len, %edx
-	movl	$2, %edi
-	movl	$1, %eax
-	syscall
-	movl	$1, %r9d
+	call	.Lwarn
 
 .Lexit:
 	movl	%r9d, %edi
@@ -68,22 +61,22 @@ _start:
 .Lusage:
 	leaq	usage(%rip), %rsi
 	movl	$usage_len, %edx
-	movl	$2, %edi
-	movl	$1, %eax
-	syscall
-	movl	$1, %edi
-	movl	$60, %eax
-	syscall
+	jmp	.Ldie
 
 .Lerr_open:
 	leaq	str_open(%rip), %rsi
 	movl	$str_open_len, %edx
-	movl	$2, %edi
-	movl	$1, %eax
+
+.Ldie:
+	call	.Lwarn
+	jmp	.Lexit
+
+.Lwarn:
+	movl	$2, %edi		# stderr
+	movl	$1, %eax		# __NR_write
 	syscall
-	movl	$1, %edi
-	movl	$60, %eax
-	syscall
+	movl	$1, %r9d
+	ret
 
 .section .rodata
 usage:
