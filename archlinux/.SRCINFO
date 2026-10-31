@@ -1,13 +1,13 @@
 pkgbase = 21mw-ir-emitter
 	pkgdesc = Tiny helper for the Chicony IR emitter on Lenovo 21MW systems
 	pkgver = 1.0.2
-	pkgrel = 1
-	url = https://codeberg.org/nathawat/21mw-ir-emitter
+	pkgrel = 2
+	url = https://github.com/nathawatc/21mw-ir-emitter
 	arch = x86_64
 	license = Apache-2.0
 	makedepends = gcc
 	depends = systemd
-	source = 21mw-ir-emitter-1.0.2.tar.gz::https://codeberg.org/nathawat/21mw-ir-emitter/archive/refs/tags/v1.0.2.tar.gz
-	b2sums = 036ac85c40b67b83c948a710b315f16b4a5065781cba0c82b36cd51164088e2aa83387ae6c58ff3eeb2eabe53ab44c4fc9595268dea37970f1558c128431badc
+	source = 21mw-ir-emitter-1.0.2.tar.gz::https://github.com/nathawatc/21mw-ir-emitter/archive/refs/tags/v1.0.2.tar.gz
+	b2sums = 034236955cb6f628f99af74178cfd80c78f2242cb4967f1df182de960d5a2a47fadc215baec2ed28d698dbc851799a3c7fcf0ececde60f1eb825b6d641c77bb2
 
 pkgname = 21mw-ir-emitter
