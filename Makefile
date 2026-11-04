@@ -1,5 +1,4 @@
-CFLAGS ?=
-ALL_LDFLAGS = -nostdlib -static -s -Wl,-n -Wl,-z,noexecstack -Wl,--build-id=none -Wl,--no-eh-frame-hdr -Wl,--gc-sections $(LDFLAGS)
+ALL_LDFLAGS = -nostdlib -static -s -Wl,-n -Wl,-z,noexecstack -Wl,--build-id=none $(LDFLAGS)
 
 # $(1) = arguments, $(2) = exact expected stderr. Requires exit status 1 and empty stdout.
 define expect_failure
