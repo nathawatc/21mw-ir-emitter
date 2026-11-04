@@ -47,6 +47,10 @@ sudo udevadm control --reload
 
 ## Verify and Troubleshoot
 
-Check `journalctl -b -u systemd-udevd` for helper failures. If invoking the helper
-manually, pass exactly one verified IR device node. It does not check the camera
-identity itself and returns a non-zero status on failure.
+Check `journalctl -b -u systemd-udevd` for helper failures. If the journal shows
+only an exit code, run `sudo udevadm control --log-level=debug`, trigger an add
+event again, and recheck it. Restore the level with
+`sudo udevadm control --log-level=info`.
+
+If invoking the helper manually, pass exactly one verified IR device node. It does
+not check the camera identity itself and returns a non-zero status on failure.
