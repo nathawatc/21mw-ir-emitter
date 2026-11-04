@@ -1,80 +1,92 @@
+# Sizes are minimized: registers are chosen for short encodings, and
+# pushq/popq loads constants in 3 bytes where movl takes 5.
 .text
 .globl _start
 _start:
-	xorl	%r9d, %r9d		# exit status = 0
-	cmpq	$2, (%rsp)
+	popq	%rax			# argc
+	popq	%rdi			# argv[0]
+	popq	%rdi			# argv[1]
+	xorl	%ebp, %ebp		# exit status = 0
+	cmpl	$2, %eax
 	jne	.Lusage
 
-	# sys_open(argv[1], O_RDWR | O_CLOEXEC, 0)
-	movq	16(%rsp), %rdi
+	# sys_open(argv[1], O_RDWR | O_CLOEXEC): eax is already 2, __NR_open
 	movl	$0x80002, %esi
-	xorl	%edx, %edx
-	movl	$2, %eax		# __NR_open
 	syscall
 
 	testl	%eax, %eax
 	js	.Lerr_open
 
-	movl	%eax, %r8d		# r8d = fd
+	xchgl	%eax, %edi		# edi = fd, preserved across syscalls
 
-	# Setup payload and struct uvc_xu_control_query on stack
-	subq	$32, %rsp
-	movq	$0x0000000000020301, (%rsp)
-	movb	$0, 8(%rsp)
-	movl	$0x0001060e, 16(%rsp)	# unit=14, sel=6, query=1
-	movl	$9, 20(%rsp)		# size=9
-	movq	%rsp, 24(%rsp)		# data = &payload
+	# Payload (9 bytes) followed by struct uvc_xu_control_query on stack
+	pushq	$0
+	pushq	$0x00020301
+	pushq	%rsp			# data = &payload
+	pushq	$0x0001060e		# unit=14, sel=6, query=1
+	movb	$9, 4(%rsp)		# size=9
 
 	# sys_ioctl(fd, UVCIOC_CTRL_QUERY, &query)
-	movl	%r8d, %edi
 	movl	$0xc0107521, %esi
-	leaq	16(%rsp), %rdx
-	movl	$16, %eax		# __NR_ioctl
+	pushq	%rsp
+	popq	%rdx
+	pushq	$16			# __NR_ioctl
+	popq	%rax
 	syscall
 
 	testl	%eax, %eax
 	jns	.Lclose
 
-	leaq	str_ioctl(%rip), %rsi
-	movl	$str_ioctl_len, %edx
+	movl	$str_ioctl, %esi
+	pushq	$str_ioctl_len
+	popq	%rdx
 	call	.Lwarn
 
 .Lclose:
 	# sys_close(fd)
-	movl	%r8d, %edi
-	movl	$3, %eax		# __NR_close
+	pushq	$3			# __NR_close
+	popq	%rax
 	syscall
 
 	testl	%eax, %eax
 	jns	.Lexit
 
-	leaq	str_close(%rip), %rsi
-	movl	$str_close_len, %edx
+	movl	$str_close, %esi
+	pushq	$str_close_len
+	popq	%rdx
 	call	.Lwarn
 
 .Lexit:
-	movl	%r9d, %edi
-	movl	$60, %eax		# __NR_exit
+	movl	%ebp, %edi
+	pushq	$60			# __NR_exit
+	popq	%rax
 	syscall
 
 .Lusage:
-	leaq	usage(%rip), %rsi
-	movl	$usage_len, %edx
+	movl	$usage, %esi
+	pushq	$usage_len
 	jmp	.Ldie
 
 .Lerr_open:
-	leaq	str_open(%rip), %rsi
-	movl	$str_open_len, %edx
+	movl	$str_open, %esi
+	pushq	$str_open_len
 
 .Ldie:
+	popq	%rdx
 	call	.Lwarn
 	jmp	.Lexit
 
+	# sys_write(stderr, rsi, rdx), set exit status 1, preserve edi
 .Lwarn:
-	movl	$2, %edi		# stderr
-	movl	$1, %eax		# __NR_write
+	pushq	%rdi
+	pushq	$2			# stderr
+	popq	%rdi
+	pushq	$1			# __NR_write
+	popq	%rax
 	syscall
-	movl	$1, %r9d
+	pushq	$1
+	popq	%rbp
+	popq	%rdi
 	ret
 
 .section .rodata
