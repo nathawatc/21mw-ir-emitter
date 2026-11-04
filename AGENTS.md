@@ -64,8 +64,9 @@ make
 make check
 ```
 
-The four tests cover missing/extra arguments, an empty path, and an unsupported
-ioctl on `/dev/null`. They expect failure and empty stdout. Normal tests must
+The four helper tests cover missing/extra arguments, an empty path, and an
+unsupported ioctl on `/dev/null`. Each requires exit status 1, empty stdout, and
+the exact stderr text, so a crash or misdirected error fails the test. Normal tests must
 never require, open, or modify a camera. Do not add fake shell wrappers,
 emulators, or large mocking infrastructure.
 
