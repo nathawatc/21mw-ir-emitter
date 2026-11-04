@@ -1,4 +1,3 @@
-PREFIX ?= /usr
 CFLAGS ?=
 ALL_LDFLAGS = -nostdlib -static -s -Wl,-n -Wl,-z,noexecstack -Wl,--build-id=none -Wl,--no-eh-frame-hdr -Wl,--gc-sections $(LDFLAGS)
 
@@ -21,8 +20,8 @@ check: 21mw-ir-emitter
 	udevadm verify udev/61-21mw-ir-emitter.rules
 
 install: 21mw-ir-emitter
-	install -D -m 755 21mw-ir-emitter $(DESTDIR)$(PREFIX)/lib/udev/21mw-ir-emitter
-	install -D -m 644 udev/61-21mw-ir-emitter.rules $(DESTDIR)$(PREFIX)/lib/udev/rules.d/61-21mw-ir-emitter.rules
+	install -D -m 755 21mw-ir-emitter $(DESTDIR)/usr/lib/udev/21mw-ir-emitter
+	install -D -m 644 udev/61-21mw-ir-emitter.rules $(DESTDIR)/usr/lib/udev/rules.d/61-21mw-ir-emitter.rules
 
 clean:
 	rm -f 21mw-ir-emitter
