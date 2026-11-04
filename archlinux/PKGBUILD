@@ -2,8 +2,8 @@
 # shellcheck shell=bash disable=SC2034,SC2154,SC2164
 
 pkgname=21mw-ir-emitter
-pkgver=1.0.2
-pkgrel=2
+pkgver=1.0.3
+pkgrel=1
 pkgdesc='Tiny helper for the Chicony IR emitter on Lenovo 21MW systems'
 arch=('x86_64')
 url='https://github.com/nathawatc/21mw-ir-emitter'
@@ -15,7 +15,7 @@ options=('!strip')
 _tag=v${pkgver}
 
 source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/${_tag}.tar.gz")
-b2sums=('034236955cb6f628f99af74178cfd80c78f2242cb4967f1df182de960d5a2a47fadc215baec2ed28d698dbc851799a3c7fcf0ececde60f1eb825b6d641c77bb2')
+b2sums=('3ed0b339c4a937593944efb962d4f33187155f4c9504b4ea2975ba3a9f51bf137e1b89c103701e0210ccd345a17cfb8e80f8dae0c964f5861177d0396ad45f75')
 
 build() {
 	cd "$srcdir/$pkgname-$pkgver"
