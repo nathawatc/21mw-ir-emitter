@@ -23,7 +23,11 @@ install: 21mw-ir-emitter
 	install -D -m 755 21mw-ir-emitter $(DESTDIR)/usr/lib/udev/21mw-ir-emitter
 	install -D -m 644 udev/61-21mw-ir-emitter.rules $(DESTDIR)/usr/lib/udev/rules.d/61-21mw-ir-emitter.rules
 
+uninstall:
+	rm -f $(DESTDIR)/usr/lib/udev/21mw-ir-emitter
+	rm -f $(DESTDIR)/usr/lib/udev/rules.d/61-21mw-ir-emitter.rules
+
 clean:
 	rm -f 21mw-ir-emitter
 
-.PHONY: all check install clean
+.PHONY: all check install uninstall clean

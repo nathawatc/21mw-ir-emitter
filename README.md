@@ -36,6 +36,15 @@ sudo udevadm trigger --action=add --settle /sys/class/video4linux/video2
 command on yours. Do not rely on the camera's by-id link alone: it can identify
 either the RGB or IR interface.
 
+## Uninstall
+
+Use `sudo pacman -R 21mw-ir-emitter` for a package install. For a source install:
+
+```sh
+sudo make uninstall
+sudo udevadm control --reload
+```
+
 ## Verify and Troubleshoot
 
 Check `journalctl -b -u systemd-udevd` for helper failures. If invoking the helper
