@@ -57,7 +57,7 @@ The helper deliberately does not identify cameras itself.
 
 ## Build and Isolated Tests
 
-Requires GCC and make.
+Requires GCC and make. `make check` also requires `udevadm verify` from systemd.
 
 ```sh
 make
@@ -66,7 +66,8 @@ make check
 
 The four helper tests cover missing/extra arguments, an empty path, and an
 unsupported ioctl on `/dev/null`. Each requires exit status 1, empty stdout, and
-the exact stderr text, so a crash or misdirected error fails the test. Normal tests must
+the exact stderr text, so a crash or misdirected error fails the test.
+`make check` then validates the rule with `udevadm verify`. Normal tests must
 never require, open, or modify a camera. Do not add fake shell wrappers,
 emulators, or large mocking infrastructure.
 

@@ -16,7 +16,7 @@ makepkg -si
 
 ### Build from Source
 
-Requires GCC and make.
+Requires GCC and make. `make check` also requires `udevadm verify` from systemd.
 
 ```sh
 make
