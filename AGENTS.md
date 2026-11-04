@@ -4,7 +4,7 @@
 
 Keep this project specific to the Lenovo ThinkBook 16 G7 ARP (21MW) and its
 Chicony IR emitter. Do not turn it into a generic camera or UVC framework.
-Keep README.md focused on installation, migration, use, and troubleshooting;
+Keep README.md focused on installation, use, and troubleshooting;
 keep implementation details and developer validation notes here.
 
 The Linux-only helper must do only: validate argv, open the device, send the
