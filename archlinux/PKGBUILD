@@ -10,6 +10,7 @@ url='https://github.com/nathawatc/21mw-ir-emitter'
 license=('Apache-2.0')
 depends=('systemd')
 makedepends=('gcc')
+options=('!strip')
 
 _tag=v${pkgver}
 

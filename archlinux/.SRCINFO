@@ -7,6 +7,7 @@ pkgbase = 21mw-ir-emitter
 	license = Apache-2.0
 	makedepends = gcc
 	depends = systemd
+	options = !strip
 	source = 21mw-ir-emitter-1.0.2.tar.gz::https://github.com/nathawatc/21mw-ir-emitter/archive/refs/tags/v1.0.2.tar.gz
 	b2sums = 034236955cb6f628f99af74178cfd80c78f2242cb4967f1df182de960d5a2a47fadc215baec2ed28d698dbc851799a3c7fcf0ececde60f1eb825b6d641c77bb2
 
