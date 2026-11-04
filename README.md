@@ -1,6 +1,7 @@
 # 21MW IR Emitter
 
-x86_64 assembly + udev helper to initialize the Chicony IR camera on Lenovo ThinkBook 16 G7 ARP (21MW)
+x86_64 assembly + udev helper to initialize the Chicony IR camera on Lenovo
+ThinkBook 16 G7 ARP (21MW)
 
 No daemon, configuration file, or systemd service is needed. Success is silent;
 errors are written to stderr for udev to capture.
