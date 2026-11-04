@@ -1,7 +1,6 @@
 .text
 .globl _start
 _start:
-	endbr64				# CET IBT landing pad
 	xorl	%r9d, %r9d		# exit status = 0
 	cmpq	$2, (%rsp)
 	jne	.Lusage
