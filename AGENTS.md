@@ -57,7 +57,8 @@ The helper deliberately does not identify cameras itself.
 
 ## Build and Isolated Tests
 
-Requires GCC and make. `make check` also requires `udevadm verify` from systemd.
+Requires GCC, make, and GNU binutils with `-z nosectionheader` support.
+`make check` also requires `udevadm verify` from systemd.
 
 ```sh
 make
