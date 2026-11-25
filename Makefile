@@ -1,4 +1,6 @@
-ALL_LDFLAGS = -nostdlib -static -s -Wa,-mx86-used-note=no -Wl,-n -Wl,-z,noexecstack -Wl,-z,nosectionheader -Wl,--build-id=none $(LDFLAGS)
+# No -z noexecstack: it only adds a 56-byte PT_GNU_STACK header. Without one, x86-64
+# Linux 5.8 and newer already map the stack non-executable.
+ALL_LDFLAGS = -nostdlib -static -s -Wa,-mx86-used-note=no -Wl,-n -Wl,-z,nosectionheader -Wl,--build-id=none $(LDFLAGS)
 
 # $(1) = arguments, $(2) = exact expected stderr. Requires exit status 1 and empty stdout.
 define expect_failure

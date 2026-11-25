@@ -102,4 +102,3 @@ str_ioctl:
 str_close:
 	.ascii	"21mw-ir-emitter: close failed\n"
 .set str_close_len, . - str_close
-.section .note.GNU-stack,"",@progbits

@@ -78,10 +78,14 @@ lib/udev/rules.d/61-21mw-ir-emitter.rules
 ```
 
 Deployment uses `/usr` as the installation prefix. The inspected native release
-binary is 455 bytes, static, with no section headers and zero external
+binary is 399 bytes, static, with no section headers and zero external
 dependencies. This is an observation, not a size guarantee or a universally
 portable Linux artifact. `strip` rejects a file with no sections, so the PKGBUILD
-sets `!strip`. Keep `PT_GNU_STACK`: dropping it would make the stack executable.
+sets `!strip`.
+
+The binary has no `PT_GNU_STACK` header, which saves 56 bytes. Without one, x86-64
+Linux 5.8 and newer map the stack non-executable; older kernels map it executable.
+Either `-z noexecstack` or a `.note.GNU-stack` section brings the header back.
 
 ## Hardware and Lifecycle Validation
 
