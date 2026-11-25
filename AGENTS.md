@@ -78,7 +78,7 @@ lib/udev/rules.d/61-21mw-ir-emitter.rules
 ```
 
 Deployment uses `/usr` as the installation prefix. The inspected native release
-binary is 399 bytes, static, with no section headers and zero external
+binary is 337 bytes, static, with no section headers and zero external
 dependencies. This is an observation, not a size guarantee or a universally
 portable Linux artifact. `strip` rejects a file with no sections, so the PKGBUILD
 sets `!strip`.
@@ -86,6 +86,14 @@ sets `!strip`.
 The binary has no `PT_GNU_STACK` header, which saves 56 bytes. Without one, x86-64
 Linux 5.8 and newer map the stack non-executable; older kernels map it executable.
 Either `-z noexecstack` or a `.note.GNU-stack` section brings the header back.
+
+Deliberate trade-offs for size:
+
+- If the ioctl and `close` both fail, only the ioctl error is printed. The exit
+  status is still 1.
+- The device is opened without `O_CLOEXEC`, because the helper never calls exec.
+- The payload's ninth byte is the `argv[2]` NULL on the stack, so `argc` must be
+  checked before the payload is built.
 
 ## Hardware and Lifecycle Validation
 
